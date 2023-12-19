@@ -14,30 +14,45 @@
  * parameters they are called with see testharness.js
  */
 
-function dump_test_results(tests, status) {
-    var results_element = document.createElement("script");
-    results_element.type = "text/json";
-    results_element.id = "__testharness__results__";
-    var test_results = tests.map(function(x) {
-        return {name:x.name, status:x.status, message:x.message, stack:x.stack}
-    });
-    var data = {test:window.location.href,
-                tests:test_results,
-                status: status.status,
-                message: status.message,
-                stack: status.stack};
-    results_element.textContent = JSON.stringify(data);
+function send_test_results(tests, status) 
+{
+    // If 1 test fails, the requested test fails
+    var result = true;
+    for(let i = 0 ; i < tests.length ; i++)
+    {
+        test_result = tests[i].format_status();
+        console.log(result);
+        if(test_result != 'Pass')
+        {
+            result = false;
+            break;
+        }
+    }
 
-    // To avoid a HierarchyRequestError with XML documents, ensure that 'results_element'
-    // is inserted at a location that results in a valid document.
-    var parent = document.body
-        ? document.body                 // <body> is required in XHTML documents
-        : document.documentElement;     // fallback for optional <body> in HTML5, SVG, etc.
+    let url = new URL(location);
+    var response_data = new Object();
+    response_data.url = url;
+    // response_data.method = "POST";
+    response_data.wpt_result = result;
 
-    parent.appendChild(results_element);
+    var response_json = JSON.stringify(response_data);
+
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() 
+    { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            callback(xmlHttp.responseText);
+    }
+    
+    let param = new URLSearchParams(url.search);
+    let container_ip = param.get('remote_ip');
+    let container_address = 'http://' + container_ip + ':5001';
+
+    xmlHttp.open("POST", container_address , true); // true for asynchronous 
+    xmlHttp.send(response_json);
 }
 
-add_completion_callback(dump_test_results);
+add_completion_callback(send_test_results);
 
 /* If the parent window has a testharness_properties object,
  * we use this to provide the test settings. This is used by the
