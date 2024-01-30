@@ -14,14 +14,30 @@
  * parameters they are called with see testharness.js
  */
 
-function send_test_results(tests, status) 
+var xhr;
+var response_data;
+
+function init_message()
+{
+    var url = window.location.href;
+    var container_ip = window.location.search.split("=")[1];
+    var container_address = 'http://' + container_ip  + ':5001';
+    
+    response_data = new Object();
+    response_data.url = url;
+    response_data.method = "POST";
+    response_data.container_address = container_address;
+
+    xhr = new XMLHttpRequest();
+}
+
+function get_test_results(tests, status) 
 {
     // If 1 test fails, the requested test fails
     var result = true;
-    for(let i = 0 ; i < tests.length ; i++)
+    for(var i = 0 ; i < tests.length ; i++)
     {
         test_result = tests[i].format_status();
-        console.log(result);
         if(test_result != 'Pass')
         {
             result = false;
@@ -29,30 +45,29 @@ function send_test_results(tests, status)
         }
     }
 
-    let url = new URL(location);
-    var response_data = new Object();
-    response_data.url = url;
-    // response_data.method = "POST";
-    response_data.wpt_result = result;
-
-    var response_json = JSON.stringify(response_data);
-
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() 
-    { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-    
-    let param = new URLSearchParams(url.search);
-    let container_ip = param.get('remote_ip');
-    let container_address = 'http://' + container_ip + ':5001';
-
-    xmlHttp.open("POST", container_address , true); // true for asynchronous 
-    xmlHttp.send(response_json);
+    send_test_results(result);
 }
 
-add_completion_callback(send_test_results);
+function send_test_results(result) 
+{
+    const base_url = location.protocol + "//" + location.host;
+    const endpoint = base_url + "/reporting/resources/bughog.py";
+
+    response_data.wpt_result = result;
+    var response_json = JSON.stringify(response_data);
+    xhr.open("POST", endpoint, true);
+    xhr.send(response_json);
+}
+
+init_message();
+
+try{
+    add_completion_callback(get_test_results);
+} catch(e)
+{
+    send_test_results(e.message);
+}
+
 
 /* If the parent window has a testharness_properties object,
  * we use this to provide the test settings. This is used by the
