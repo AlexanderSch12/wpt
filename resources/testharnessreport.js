@@ -20,45 +20,45 @@ window.onerror = function(error, url, line) {
     errors.push({error:error, url:url, line:line});
 };
 
-function init_babel()
-{
-    var scripts;
+// function init_babel()
+// {
+//     var scripts;
 
-    Babel.registerPreset("env-plus", {
-        presets: [[Babel.availablePresets["env"], {
-            "targets":
-            {
-              "chrome": 5
-            },
-            "useBuiltIns": "entry"
-          }]]
-      });
+//     Babel.registerPreset("env-plus", {
+//         presets: [[Babel.availablePresets["env"], {
+//             "targets":
+//             {
+//               "chrome": 5
+//             },
+//             "useBuiltIns": "entry"
+//           }]]
+//       });
 
-    scripts = document.getElementsByTagName("script");
-    for(var i = 0; i < scripts.length ; i++)
-    {
-        var script = scripts[i];
-        var splits = script.src.split("/");
-        if(splits[splits.length - 1] === "babel.min.js" || splits[splits.length - 1] === "testharnessreport.js" || splits[splits.length - 1] === "testharness_babel.js" )
-        {
-            script.className = "babel_ignore";
-        }
-        if(script.className !== "babel_ignore")
-        {
+//     scripts = document.getElementsByTagName("script");
+//     for(var i = 0; i < scripts.length ; i++)
+//     {
+//         var script = scripts[i];
+//         var splits = script.src.split("/");
+//         if(splits[splits.length - 1] === "babel.min.js" || splits[splits.length - 1] === "testharnessreport.js" || splits[splits.length - 1] === "testharness_babel.js" )
+//         {
+//             script.className = "babel_ignore";
+//         }
+//         if(script.className !== "babel_ignore")
+//         {
 
-            console.log("SET ATTRIBUTE");
-            script.setAttribute("type","text/babel");
-            script.setAttribute("data-presets", "env-plus");
+//             console.log("SET ATTRIBUTE");
+//             script.setAttribute("type","text/babel");
+//             script.setAttribute("data-presets", "env-plus");
 
-        }
-    }
+//         }
+//     }
 
-    document.addEventListener("DOMContentLoaded", function() 
-    {
-        console.log("DOM_LOADED");
-    });
+//     document.addEventListener("DOMContentLoaded", function() 
+//     {
+//         console.log("DOM_LOADED");
+//     });
 
-}
+// }
 
 var xhr;
 var response_data;
@@ -87,25 +87,24 @@ function get_test_results(tests, status)
     {
         test_result = tests[i].format_status();
         results.push(test_result);
-        console.log(test_result)
         if(test_result != 'Pass')
         {
             result = false;
-            break;
         }
     }
 
     send_test_results(result);
 }
 
-function send_test_results(result) 
+function send_test_results(result, error) 
 {
     const base_url = location.protocol + "//" + location.host;
     const endpoint = base_url + "/reporting/resources/bughog.py";
 
-    if(!result)
+    if(error)
     {
         result = "error"
+        errors.push(e);
     }
     response_data.wpt_result = result;
     response_data.results = results;
@@ -122,7 +121,7 @@ try{
     add_completion_callback(get_test_results);
 } catch(e)
 {
-    send_test_results();
+    send_test_results(e, true);
 }
 
 
