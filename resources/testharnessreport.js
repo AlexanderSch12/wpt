@@ -92,8 +92,11 @@ function get_test_results(tests, status)
             result = false;
         }
     }
-
-    send_test_results(result);
+    if(results.length == 0)
+    {
+        result = "No results received"
+    }
+    send_test_results(result, false);
 }
 
 function send_test_results(result, error) 
@@ -104,7 +107,7 @@ function send_test_results(result, error)
     if(error)
     {
         result = "error"
-        errors.push(e);
+        errors.push(result);
     }
     response_data.wpt_result = result;
     response_data.results = results;
