@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>
+   img-src-self-unique-origin
+  </title>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+ </head>
+ <body>
+  <p>
+   The origin of an URL is called "unique" when it is considered to be
+        different from every origin, including itself. The origin of a
+        data-url is unique. When the current origin is unique, the CSP source
+        'self' must not match any URL.
+  </p>
+  <script>
+   "use strict";
+
+var iframe = document.createElement("iframe");
+iframe.src = encodeURI("data:text/html,\n          <script>\n              /* Add the CSP: frame-src: 'self'. */\n              var meta = document.createElement('meta');\n              meta.httpEquiv = 'Content-Security-Policy';\n              meta.content = \"img-src 'self'\";\n              document.getElementsByTagName('head')[0].appendChild(meta);\n\n              /* Notify the parent the image has been blocked. */\n              window.addEventListener('securitypolicyviolation', e => {\n                  if (e.originalPolicy == \"img-src 'self'\")\n                      window.parent.postMessage('Test PASS', '*');\n              });\n          </scr" + "ipt>\n\n          This image should be blocked by CSP:\n          <img src='data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7'></img>\n        ");
+if (window.async_test) {
+  async_test(function (t) {
+    window.addEventListener("message", function (e) {
+      if (e.data == "Test PASS") t.done();
+    });
+  }, "Image's url must not match with 'self'. Image must be blocked.");
+}
+document.body.appendChild(iframe);
+  </script>
+ </body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <script nonce="abc" src="/resources/testharness.js">
+  </script>
+  <script nonce="abc" src="/resources/testharnessreport.js">
+  </script>
+ </head>
+ <body>
+  <script nonce="abc">
+   "use strict";
+
+var blob_string = "<script>alert(document.domain)<\/scr" + "ipt>";
+var blob = new Blob([blob_string], {
+  type: 'text/html'
+});
+var url = URL.createObjectURL(blob);
+var i = document.createElement('iframe');
+i.src = url;
+document.body.appendChild(i);
+  </script>
+  <script async="" defer="" nonce="abc" src="../support/checkReport.sub.js?reportField=violated-directive&amp;reportValue=script-src%20%27nonce-abc%27">
+  </script>
+ </body>
+</html>

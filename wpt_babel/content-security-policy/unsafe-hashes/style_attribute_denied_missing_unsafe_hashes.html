@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta content="img-src *;
+                      style-src 'sha256-S0VSqEOmzmyOifPfat2sJ7ELOgkldAEbaXlvi5iMqjc=';" http-equiv="Content-Security-Policy"/>
+  <!--
+      'sha256-S0VSqEOmzmyOifPfat2sJ7ELOgkldAEbaXlvi5iMqjc=' ==> 'background: green'
+      -->
+  <title>
+   Event handlers should be allowed if a matching hash and 'unsafe-hashes' are present
+  </title>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+ </head>
+ <body>
+  <div id="log">
+  </div>
+  <script>
+   "use strict";
+
+var t1 = async_test("Test that the inline style attribute is blocked");
+window.addEventListener('securitypolicyviolation', t1.step_func_done(function (e) {
+  assert_equals(e.violatedDirective, 'style-src-attr');
+  assert_equals(e.blockedURI, 'inline');
+}));
+  </script>
+  <img id="test" src="../support/pass.png" style="background: green"/>
+ </body>
+</html>

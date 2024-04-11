@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta content="script-src 'unsafe-inline'" http-equiv="Content-Security-Policy"/>
+ </head>
+ <body>
+  <script>
+   "use strict";
+
+var blob_payload = "\n        <!doctype html>\n         <script>\n           var i = false;\n           try {\n             eval('i = true');\n           } catch {}\n           opener.postMessage(i ? \"eval allowed\" : \"eval blocked\", '*');\n         </scr" + "ipt>\n         ";
+var blob_url = URL.createObjectURL(new Blob([blob_payload], {
+  type: 'text/html'
+}));
+parent.location = blob_url;
+  </script>
+ </body>
+</html>

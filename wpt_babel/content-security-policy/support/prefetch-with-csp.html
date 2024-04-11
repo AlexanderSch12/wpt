@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <script>
+   "use strict";
+
+var link = document.createElement("link");
+link.rel = "prefetch";
+var bc = new BroadcastChannel(new URLSearchParams(location.search).get("uid"));
+link.addEventListener("error", function (e) {
+  return bc.postMessage(false);
+});
+link.href = "pass.png";
+document.head.appendChild(link);
+var observer = new PerformanceObserver(function (entries) {
+  var found = entries.getEntriesByName(new URL("pass.png", location.href).href);
+  if (found.length) bc.postMessage(found[0].encodedBodySize > 0);
+});
+observer.observe({
+  entryTypes: ["resource"]
+});
+  </script>
+ </head>
+</html>

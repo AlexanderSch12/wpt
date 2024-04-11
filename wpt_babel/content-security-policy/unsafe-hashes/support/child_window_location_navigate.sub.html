@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta content="{{GET[csp]}}" http-equiv="Content-Security-Policy"/>
+ </head>
+ <body>
+  <span id="escape">
+   {{GET[url]}}
+  </span>
+  <script nonce="abc">
+   "use strict";
+
+window.addEventListener('securitypolicyviolation', function (e) {
+  opener.postMessage('fail', '*');
+});
+window.location.href = document.getElementById("escape").textContent;
+  </script>
+ </body>
+</html>

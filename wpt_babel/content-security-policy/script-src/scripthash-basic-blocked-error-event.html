@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<head>
+ <title>
+  CSP script-hash block causes error event
+ </title>
+ <script src="/resources/testharness.js">
+ </script>
+ <script src="/resources/testharnessreport.js">
+ </script>
+ <meta content="script-src 'self' 'sha256-deadbeef'" http-equiv="Content-Security-Policy"/>
+</head>
+<body>
+ <script src="support/inline-script-should-be-blocked.js">
+ </script>
+</body>

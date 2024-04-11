@@ -1,0 +1,23 @@
+<html>
+ <head>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+  <!-- Content-Security-Policy-Report-Only: script-src 'unsafe-inline' -->
+ </head>
+ <body>
+  <script>
+   "use strict";
+
+var t = async_test("Eval is allowed because the CSP is report-only");
+try {
+  eval("t.done()");
+} catch (_unused) {
+  t.step(function () {
+    assert_true(false, "The eval should have execute succesfully");
+  });
+}
+  </script>
+ </body>
+</html>

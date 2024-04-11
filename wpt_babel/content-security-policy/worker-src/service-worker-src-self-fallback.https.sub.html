@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<title>
+ Web platform test for service worker allowed by worker-src self
+</title>
+<script src="/resources/testharness.js">
+</script>
+<script src="/resources/testharnessreport.js">
+</script>
+<script src="../support/testharness-helper.js">
+</script>
+<!-- Ideally we would use "script-src 'none'" alone but we have to allow the actual script that spawns the workers, hence the nonce.-->
+<meta content="worker-src 'self'; child-src 'none'; script-src 'none' 'nonce-foo'; default-src 'none'; " http-equiv="Content-Security-Policy"/>
+<script data-desc-fallback="Same-origin service worker allowed by worker-src 'self'." id="foo" nonce="foo" src="../support/service-worker-helper.js">
+</script>

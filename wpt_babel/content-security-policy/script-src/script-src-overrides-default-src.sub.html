@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <!-- Programmatically converted from a WebKit Reftest, please forgive resulting idiosyncracies.-->
+  <meta content="default-src about:; script-src 'self' 'unsafe-inline'; style-src 'self'; connect-src 'self';" http-equiv="Content-Security-Policy"/>
+  <title>
+   script-src-overrides-default-src
+  </title>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+  <script src='../support/logTest.sub.js?logs=["PASS 1 of 2","PASS 2 of 2"]'>
+  </script>
+  <script src="../support/alertAssert.sub.js?alerts=[]">
+  </script>
+  <script>
+   "use strict";
+
+window.addEventListener('securitypolicyviolation', function (e) {
+  log("Fail");
+});
+  </script>
+ </head>
+ <body onload="log('PASS 2 of 2')">
+  <script>
+   "use strict";
+
+log('PASS 1 of 2');
+  </script>
+  <div id="log">
+  </div>
+ </body>
+</html>

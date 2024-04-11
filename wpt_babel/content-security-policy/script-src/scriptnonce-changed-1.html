@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<head>
+ <title>
+  CSP inline script check is done at #prepare-a-script (nonce)
+ </title>
+ <script src="/resources/testharness.js">
+ </script>
+ <script src="/resources/testharnessreport.js">
+ </script>
+ <meta content="script-src 'self' 'nonce-abc' 'sha256-deadbeef'" http-equiv="Content-Security-Policy"/>
+</head>
+<!--
+  "Should element's inline behavior be blocked by Content Security Policy?"
+  is executed at the time of https://html.spec.whatwg.org/C/#prepare-a-script,
+  not at https://html.spec.whatwg.org/C/#execute-the-script-block.
+  So when nonce is modified after #prepare-a-script, the nonce BEFORE
+  the modification is used for hash check.
+-->
+<script nonce="abc">
+ "use strict";
+
+var log1 = '';
+</script>
+<!--  Execution order:
+  async script is executed
+  -> stylesheet is loaded
+  -> inline script is executed. -->
+<link href="support/empty.css?dummy=3&amp;pipe=trickle(d2)" rel="stylesheet" type="text/css"/>
+<script async="" src="support/change-scriptnonce-before-execute.js?dummy=3&amp;pipe=trickle(d1)">
+</script>
+<script id="scr1" nonce="abc">
+ "use strict";
+
+log1 += 'scr1 executed';
+</script>
+<script nonce="abc">
+ "use strict";
+
+test(function () {
+  assert_equals(log1, 'scr1 executed');
+}, 'scr1 nonce before modification should not be blocked');
+</script>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <!-- Programmatically converted from a WebKit Reftest, please forgive resulting idiosyncracies.-->
+  <meta content="script-src 'self' 'unsafe-inline'; connect-src 'self'" http-equiv="Content-Security-Policy"/>
+  <title>
+   injected-inline-script-allowed
+  </title>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+  <script src='../support/logTest.sub.js?logs=["Pass 1 of 2","Pass 2 of 2"]'>
+  </script>
+  <script src="../support/alertAssert.sub.js?alerts=[]">
+  </script>
+ </head>
+ <body>
+  <script>
+   "use strict";
+
+window.addEventListener('securitypolicyviolation', function (e) {
+  log("Fail");
+});
+  </script>
+  <script src="support/inject-script.js">
+  </script>
+  <div id="log">
+  </div>
+ </body>
+</html>

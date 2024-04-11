@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<script src="/resources/testharness.js">
+</script>
+<script src="/resources/testharnessreport.js">
+</script>
+<meta content="frame-src 'none'" http-equiv="Content-Security-Policy"/>
+<body>
+ <script>
+  "use strict";
+
+var t = async_test("<iframe src='javascript:...'> not blocked by 'frame-src'");
+var i = document.createElement('iframe');
+i.src = "javascript:window.top.t.done();";
+document.body.appendChild(i);
+ </script>
+</body>

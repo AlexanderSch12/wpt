@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <!-- Programmatically converted from a WebKit Reftest, please forgive resulting idiosyncracies.-->
+  <meta content="child-src 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; connect-src 'self';" http-equiv="Content-Security-Policy"/>
+  <title>
+   child-src-about-blank-allowed-by-default
+  </title>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+  <p>
+   These frames should not be blocked by Content-Security-Policy.
+        It's pointless to block about:blank iframes because
+        blocking a frame just results in displaying about:blank anyway!
+  </p>
+  <script>
+   "use strict";
+
+var t = async_test("Check that frames load without throwing any violation events");
+window.addEventListener("securitypolicyviolation", t.unreached_func("Should not have fired any events"));
+  </script>
+  <iframe src="about:blank">
+  </iframe>
+  <object data="about:blank" type="text/html">
+  </object>
+  <div id="log">
+  </div>
+  <script>
+   "use strict";
+
+t.done();
+  </script>
+ </head>
+</html>

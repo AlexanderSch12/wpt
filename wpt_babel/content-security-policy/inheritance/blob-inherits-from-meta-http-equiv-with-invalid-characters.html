@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta content="
+    default-src 'none';
+    script-src blob: 'nonce-abc'" http-equiv="Content-Security-Policy"/>
+  <script nonce="abc" src="/resources/testharness.js">
+  </script>
+  <script nonce="abc" src="/resources/testharnessreport.js">
+  </script>
+ </head>
+ <script nonce="abc">
+  "use strict";
+
+async_test(function (t) {
+  var script = document.createElement("script");
+  script.onerror = function () {
+    return assert_unreached("FAIL should not have fired error event.");
+  };
+  script.onload = function () {
+    return t.done();
+  };
+  script.src = URL.createObjectURL(new Blob(["alert('PASS executed blob URL script.');"]));
+  document.head.appendChild(script);
+}, "blob: URL inherits CSP from a meta tag whose contents have newline characters.");
+ </script>
+</html>

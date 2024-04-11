@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<head>
+ <script src="/resources/testharness.js">
+ </script>
+ <script src="/resources/testharnessreport.js">
+ </script>
+ <script>
+  "use strict";
+
+window.addEventListener('securitypolicyviolation', function (e) {
+  top.postMessage({
+    result: 'fail',
+    violatedDirective: e.violatedDirective
+  }, '*');
+});
+ </script>
+</head>
+<body>
+ <a href="post_message_to_frame_owner.html" id="link" target="_parent">
+  dummy link
+ </a>
+ <script>
+  "use strict";
+
+document.getElementById('link').click();
+ </script>
+</body>

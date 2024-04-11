@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>
+   Audio element src attribute must match src list - positive test
+  </title>
+  <meta content="script-src * 'unsafe-inline'; media-src 'self';" http-equiv="Content-Security-Policy"/>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+ </head>
+ <body>
+  <h1>
+   Audio element src attribute must match src list - positive test
+  </h1>
+  <div id="log">
+  </div>
+  <script>
+   "use strict";
+
+var src_test = async_test("In-policy audio src");
+var source_test = async_test("In-policy audio source element");
+var t_spv = async_test("Should not fire policy violation events");
+var test_count = 2;
+window.addEventListener("securitypolicyviolation", t_spv.unreached_func("Should not have fired any event"));
+function media_loaded(t) {
+  t.done();
+  if (--test_count <= 0) {
+    t_spv.done();
+  }
+}
+function media_error_handler(t) {
+  t.step(function () {
+    assert_unreached("Media error handler should be triggered for non-allowed domain.");
+  });
+  t.done();
+}
+  </script>
+  <audio controls="" height="240" id="audioObject" onloadeddata="media_loaded(source_test)" width="320">
+   <source id="audioSourceObject" onerror="media_error_handler(source_test)" src="/media/sound_5.oga" type="audio/ogg"/>
+  </audio>
+  <audio controls="" height="240" id="audioObject2" onerror="media_error_handler(src_test)" onloadeddata="media_loaded(src_test)" src="/media/sound_5.oga" width="320">
+  </audio>
+ </body>
+</html>

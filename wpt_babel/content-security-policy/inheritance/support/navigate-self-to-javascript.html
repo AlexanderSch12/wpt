@@ -1,0 +1,7 @@
+<meta content="img-src 'none'" http-equiv="Content-Security-Policy"/>
+<script>
+ "use strict";
+
+var js_payload = "\n    <div>\n      <img src=\"".concat(window.origin, "/content-security-policy/support/fail.png\"\n           onload=\"opener.postMessage(\\'img loaded\\', \\'*\\');\"\n           onerror=\"opener.postMessage(\\'img blocked\\', \\'*\\');\"\n      >\n    </div>\n  ");
+open("javascript:'".concat(js_payload, "'"), "_self");
+</script>

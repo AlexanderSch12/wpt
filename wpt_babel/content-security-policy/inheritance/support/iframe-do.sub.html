@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<meta content="img-src {{GET[img-src]}}" http-equiv="Content-Security-Policy"/>
+<script>
+ "use strict";
+
+window.addEventListener('message', function (e) {
+  eval(e.data);
+});
+top.postMessage('ready', '*');
+</script>

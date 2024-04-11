@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta content="script-src 'unsafe-hashes' 'nonce-abc' 'sha256-wmuLCpoj8EMqfQlPnt5NIMgKkCK62CxAkAiewI0zZps='; img-src *;" http-equiv="Content-Security-Policy"/>
+  <title>
+   Event handlers should be allowed if a matching hash and 'unsafe-hashes' are present
+  </title>
+  <script nonce="abc" src="/resources/testharness.js">
+  </script>
+  <script nonce="abc" src="/resources/testharnessreport.js">
+  </script>
+ </head>
+ <body>
+  <div id="log">
+  </div>
+  <script nonce="abc">
+   "use strict";
+
+var t1 = async_test("Test that the inline event handler is allowed to run");
+window.addEventListener('securitypolicyviolation', t1.unreached_func("Should have not raised any event"));
+  </script>
+  <img onload="t1.done();" src="../support/pass.png"/>
+ </body>
+</html>

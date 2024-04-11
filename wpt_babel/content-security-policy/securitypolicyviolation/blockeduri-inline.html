@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<meta content="script-src 'nonce-abc'" http-equiv="Content-Security-Policy"/>
+<script nonce="abc" src="/resources/testharness.js">
+</script>
+<script nonce="abc" src="/resources/testharnessreport.js">
+</script>
+<script nonce="abc">
+ "use strict";
+
+async_test(function (t) {
+  var watcher = new EventWatcher(t, document, 'securitypolicyviolation');
+  watcher.wait_for('securitypolicyviolation').then(t.step_func_done(function (e) {
+    assert_equals(e.blockedURI, "inline");
+    assert_equals(e.lineNumber, 15);
+    assert_equals(e.columnNumber, 9);
+  }));
+}, "Inline violations have a blockedURI of 'inline'");
+</script>
+<script>
+ "use strict";
+
+test(function (t) {
+  assert_unreached();
+}, "Blocked script shouldn't execute.");
+</script>

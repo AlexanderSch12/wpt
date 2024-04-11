@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>
+   Positive test case: Inline script should run 'unsafe-inline' script-src directive.
+  </title>
+  <meta content="script-src 'self' 'unsafe-inline';" http-equiv="Content-Security-Policy"/>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+  <script src="inlineSuccessTest.js">
+  </script>
+ </head>
+ <body>
+  <h1>
+   Positive test case: Inline script should run 'unsafe-inline' script-src directive.
+  </h1>
+  <div id="log">
+  </div>
+  <script>
+   "use strict";
+
+inlineRan = true;
+  </script>
+ </body>
+</html>

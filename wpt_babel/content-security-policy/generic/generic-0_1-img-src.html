@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <title>
+   default-src should cascade to img-src directive
+  </title>
+  <meta content="default-src 'self' 'unsafe-inline';" http-equiv="Content-Security-Policy"/>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+  <script src="../support/siblingPath.js">
+  </script>
+ </head>
+ <body>
+  <h1>
+   default-src should cascade to img-src directive
+  </h1>
+  <div id="log">
+  </div>
+  <script>
+   "use strict";
+
+var imgsrc = async_test("Verify cascading of default-src to img-src policy");
+var onerrorFired = false;
+var t_spv = async_test("Should fire violation events for every failed violation");
+window.addEventListener("securitypolicyviolation", t_spv.step_func_done(function (e) {
+  assert_equals(e.violatedDirective, "img-src");
+}));
+  </script>
+  <img id="imgfail" onerror="onerrorFired = true;" onload='imgsrc.step(function() { assert_unreached("Image load was not blocked."); });' src=""/>
+  <img onload='imgsrc.step(function() { assert_true(true, "Image load was blocked."); });' src="../support/pass.png"/>
+  <script>
+   "use strict";
+
+document.getElementById('imgfail').src = buildSiblingPath('www1', '../support/fail.png');
+onload = function onload() {
+  imgsrc.step(function () {
+    assert_true(onerrorFired, "onerror handler for blocked img didn't fire");
+  });
+  imgsrc.done();
+};
+  </script>
+ </body>
+</html>

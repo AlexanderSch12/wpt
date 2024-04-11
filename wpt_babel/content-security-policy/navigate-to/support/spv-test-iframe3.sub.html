@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<head>
+ <script>
+  "use strict";
+
+window.addEventListener('securitypolicyviolation', function (e) {
+  top.postMessage({
+    iframe: 'iframe3',
+    violatedDirective: e.violatedDirective
+  }, '*');
+});
+ </script>
+</head>
+<body>
+ IFRAME 3
+</body>

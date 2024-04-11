@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<head>
+ <meta charset="utf-8"/>
+ <meta content="frame-src 'self'" http-equiv="Content-Security-Policy"/>
+ <script>
+  "use strict";
+
+// The following is the content of a srcdoc iframe. It contains:
+// - a script that catches the frame-src securitypolicyviolation event and
+// forwards the information to the parent,
+// - a cross-origin iframe.
+var doc = "\n      <script>\n        window.addEventListener(\"securitypolicyviolation\", e => {\n          if (e.violatedDirective === \"frame-src\") {\n            window.top.postMessage(\"frame blocked\", \"*\");\n          }\n        });\n      </scr" + "ipt>\n      <iframe src=\"http://{{hosts[alt][]}}:{{ports[http][0]}}/content-security-policy/inheritance/support/postmessage-top.html\"></iframe>";
+doc = doc.replaceAll('"', "\\\'");
+var js_url = "javascript:'<iframe srcdoc=\"" + doc + "\">'";
+window.open(js_url, "_self");
+ </script>
+</head>

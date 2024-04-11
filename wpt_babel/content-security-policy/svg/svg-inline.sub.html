@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>
+   svg-policy-with-resource
+  </title>
+  <meta content="script-src 'self' 'unsafe-inline';" http-equiv="Content-Security-Policy"/>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+  <script>
+   "use strict";
+
+var t_spv = async_test("Should fire violation event");
+window.addEventListener("securitypolicyviolation", t_spv.step_func_done(function (e) {
+  assert_equals(e.violatedDirective, "script-src-elem");
+}));
+  </script>
+ </head>
+ <body>
+  <p>
+   Tests that an SVG loaded in an iframe with a policy enforces it, not
+    the policy enforced by this parent frame.  The SVG should render and
+    not redirect to a different resource.
+  </p>
+  <div id="log">
+  </div>
+  <?xml version="1.0" standalone="no"?>
+  <svg height="5cm" version="1.1" viewbox="0 0 600 500" width="6cm" xmlns="http://www.w3.org/2000/svg">
+   <script type="application/ecmascript" xlink:href="http://www1.{{host}}:{{ports[http][0]}}/content-security-policy/support/.js">
+    "use strict";
+   </script>
+   <circle cx="300" cy="225" fill="lawngreen" r="100">
+   </circle>
+   <text font-family="Verdana" font-size="50" text-anchor="middle" x="300" y="250">
+    PASS
+   </text>
+  </svg>
+ </body>
+</html>

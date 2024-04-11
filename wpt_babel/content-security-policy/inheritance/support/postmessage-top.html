@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<script>
+ "use strict";
+
+var params = new URLSearchParams(window.location.search);
+top.postMessage({
+  msg: "ready",
+  token: params.get("token")
+}, "*");
+</script>

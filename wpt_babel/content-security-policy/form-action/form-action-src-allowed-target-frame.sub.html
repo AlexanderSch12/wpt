@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>
+   form-action-src-allowed-target-frame
+  </title>
+  <meta content="form-action 'self'" http-equiv="Content-Security-Policy"/>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+  <script>
+   "use strict";
+
+function OnDocumentLoaded() {
+  var test = async_test("form submission targetting a frame allowed");
+  window.addEventListener("message", function (event) {
+    if (event.data == "DocumentNotBlocked") {
+      test.done();
+    }
+  });
+  var form = document.getElementById("form");
+  form.action = "/content-security-policy/form-action/support/post-message-to-parent.sub.html";
+  var submit = document.getElementById("submit");
+  submit.click();
+}
+  </script>
+ </head>
+ <body onload="OnDocumentLoaded();">
+  <form id="form" method="GET" target="frame">
+   <input name="message" type="hidden" value="DocumentNotBlocked"/>
+   <input id="submit" type="submit"/>
+  </form>
+  <iframe name="frame">
+  </iframe>
+ </body>
+</html>

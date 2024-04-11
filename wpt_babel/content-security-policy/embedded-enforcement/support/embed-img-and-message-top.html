@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+ <script>
+  "use strict";
+
+function addImage() {
+  var img = document.createElement('img');
+  img.onload = function () {
+    return top.postMessage('img loaded', '*');
+  };
+  img.onerror = function () {
+    return top.postMessage('img blocked', '*');
+  };
+  img.src = '/content-security-policy/support/pass.png';
+  document.body.appendChild(img);
+}
+ </script>
+ <body onpageshow="addImage();">
+ </body>
+</html>

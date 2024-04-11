@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta content="webrtc 'unrecognized';" http-equiv="Content-Security-Policy"/>
+  <title>
+   webrtc blocked with an unrecognized explicit webrtc policy
+  </title>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+  <script src="webrtc.js">
+  </script>
+ </head>
+ <body>
+  <script>
+   "use strict";
+
+expectBlock();
+  </script>
+  <div id="log">
+  </div>
+ </body>
+</html>

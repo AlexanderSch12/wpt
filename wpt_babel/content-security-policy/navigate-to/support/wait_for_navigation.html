@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<head>
+ <script src="/resources/testharness.js">
+ </script>
+ <script src="/resources/testharnessreport.js">
+ </script>
+ <script>
+  "use strict";
+
+window.addEventListener('securitypolicyviolation', function (e) {
+  top.postMessage({
+    result: 'fail',
+    violatedDirective: e.violatedDirective
+  }, '*');
+});
+ </script>
+</head>
+<body>
+</body>

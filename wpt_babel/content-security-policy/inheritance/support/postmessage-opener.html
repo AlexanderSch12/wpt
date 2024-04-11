@@ -1,0 +1,9 @@
+<script>
+ "use strict";
+
+var params = new URLSearchParams(window.location.search);
+opener.postMessage({
+  msg: "ready",
+  token: params.get("token")
+}, "*");
+</script>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+ <meta content="img-src 'self'" http-equiv="Content-Security-Policy"/>
+ <script src="/resources/testharness.js">
+ </script>
+ <script src="/resources/testharnessreport.js">
+ </script>
+</head>
+<body>
+ <script>
+  "use strict";
+
+var t1 = async_test("First image should be blocked");
+var t2 = async_test("Second image should be blocked");
+window.onmessage = t1.step_func_done(function (e) {
+  if (e.data == "img blocked") {
+    frames[0].frames[0].frameElement.srcdoc = "<script>\n           window.addEventListener('securitypolicyviolation', function(e) {\n             if (e.violatedDirective == 'img-src') {\n               top.postMessage('img blocked', '*');\n             }\n           })\n         </scr" + "ipt>\n         <img src='/content-security-policy/support/fail.png'\n              onload='top.postMessage(\"img loaded\", \"*\")'/>";
+    window.onmessage = t2.step_func_done(function (e) {
+      if (e.data != "img blocked") assert_true(false, "The second image should have been blocked");
+    });
+  } else {
+    assert_true(false, "The first image should have been blocked");
+  }
+});
+ </script>
+ <iframe src="support/srcdoc-child-frame.html">
+ </iframe>
+</body>

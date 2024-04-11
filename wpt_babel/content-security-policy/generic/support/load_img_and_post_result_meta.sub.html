@@ -1,0 +1,20 @@
+<html>
+ <head>
+  <meta content="{{GET[csp]}}" http-equiv="Content-Security-Policy"/>
+ </head>
+ <body>
+  <script>
+   "use strict";
+
+var img = document.createElement("img");
+img.src = "/content-security-policy/support/pass.png";
+img.onload = function () {
+  parent.postMessage('img loaded', '*');
+};
+img.onerror = function () {
+  parent.postMessage('img not loaded', '*');
+};
+document.body.appendChild(img);
+  </script>
+ </body>
+</html>

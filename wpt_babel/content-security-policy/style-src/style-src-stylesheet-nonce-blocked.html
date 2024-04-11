@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta content="style-src 'nonce-nonceynonce';" http-equiv="Content-Security-Policy"/>
+  <script src="/resources/testharness.js">
+  </script>
+  <script src="/resources/testharnessreport.js">
+  </script>
+  <script>
+   "use strict";
+
+var t = async_test("Should not load stylesheet without correct nonce");
+var t_spv = async_test("Should fire a securitypolicyviolation event");
+document.addEventListener("securitypolicyviolation", t_spv.step_func_done(function (e) {
+  assert_equals("style-src-elem", e.violatedDirective);
+}));
+  </script>
+  <link href="/content-security-policy/style-src/resources/style-src.css" nonce="not-nonceynonce" rel="stylesheet" type="text/css"/>
+ </head>
+ <body>
+  <div id="log">
+  </div>
+  <div id="content">
+   Lorem ipsum
+  </div>
+  <script>
+   "use strict";
+
+t.step(function () {
+  var contentEl = document.getElementById("content");
+  var marginLeftVal = getComputedStyle(contentEl).getPropertyValue('margin-left');
+  assert_not_equals(marginLeftVal, "2px");
+  t.done();
+});
+  </script>
+ </body>
+</html>

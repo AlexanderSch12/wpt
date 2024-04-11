@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+ <body>
+  <script nonce="abc">
+   "use strict";
+
+top.postMessage('cookie set', '*');
+  </script>
+  <script>
+   "use strict";
+
+// This script block will trigger a violation report.
+alert('FAIL');
+  </script>
+ </body>
+</html>
