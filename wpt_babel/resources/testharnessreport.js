@@ -74,7 +74,7 @@ function get_test_results(tests, status)
             result = false;
         }
     }
-    
+    console.log(result);
     send_test_results(result);
 }
 

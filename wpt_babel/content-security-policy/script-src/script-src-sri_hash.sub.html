@@ -18,8 +18,6 @@
   <div id="log">
   </div>
   <script nonce="dummy">
-   "use strict";
-
 var port = "{{ports[http][0]}}";
 if (location.protocol === "https:") port = "{{ports[https][0]}}";
 var crossorigin_base = location.protocol + "//{{domains[www]}}:" + port;
@@ -52,14 +50,13 @@ test(function (_) {
 }, "Load all the tests.");
   </script>
   <script nonce="dummy">
-   "use strict";
 
 var externalRan = false;
   </script>
   <script integrity="sha256-wIc3KtqOuTFEu6t17sIBuOswgkV406VJvhSk79Gw6U0=" src="./externalScript.js">
   </script>
   <script nonce="dummy">
-   "use strict";
+
 
 test(function () {
   assert_true(externalRan, 'External script ran.');

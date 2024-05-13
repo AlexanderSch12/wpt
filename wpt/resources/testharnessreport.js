@@ -74,6 +74,7 @@ function get_test_results(tests, status)
             result = false;
         }
     }
+    console.log("STATUS: " + JSON.stringify(status));
     
     send_test_results(result);
 }
